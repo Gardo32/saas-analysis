@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>CSV Data</h1>
+    <div class="table-container">
+        {{ tables|safe }}
+    </div>
+    <a href="{{ url_for('csv_handler.download_csv_file', filename=filename) }}" class="btn">Download Processed CSV</a>
+    <form action="{{ url_for('csv_handler.process_csv_file', filename=filename) }}" method="post">
+        <div class="form-group">
+            <label for="index">Column Name for Index:</label>
+            <input type="text" name="index" id="index" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="columns">Column to Plot:</label>
+            <input type="text" name="columns" id="columns" class="form-control" required>
+        </div>
+        <input type="submit" value="Compare Columns" class="btn">
+    </form>
+{% endblock %}

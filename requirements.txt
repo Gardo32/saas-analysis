@@ -10,3 +10,4 @@ WTForms==2.3.3
 Werkzeug==2.0.3
 python-dotenv
 pandas
+matplotlib
