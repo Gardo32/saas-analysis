@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Available Log Files</h2>
+    <ul>
+        {% for filename in log_files %}
+        <li><a href="{{ url_for('view_log', filename=filename) }}">{{ filename }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="red">Welcome, {{ name }}!</h2>
+    
+    <div class="button-container">
+        <a href="{{ url_for('vote_page') }}" class="button">Vote</a>
+        <a href="{{ url_for('view_results') }}" class="button">View Results</a>
+        <a href="{{ url_for('list_logs') }}" class="button">View Logs</a>
+        <a href="{{ url_for('logout') }}" class="button">Logout</a>
+        <!-- Add User Button -->
+        <button id="addUserBtn" class="button green">Add User</button>
+    </div>
+    
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add User</h2>
+            <form id="addUserForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit" class="button">Add User</button>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='add_user.js') }}"></script>
+{% endblock %}
