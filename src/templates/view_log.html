@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Log File: {{ filename }}</h2>
+    <table>
+        <tr>
+            <th>Line Number</th>
+            <th>Content</th>
+        </tr>
+        {% for line_number, line_content in log_content|enumerate(1) %}
+        <tr>
+            <td>{{ line_number }}</td>
+            <td>{{ line_content }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="button-container">
+        <a href="{{ url_for('download_log', filename=filename) }}" class="button green">Download Log</a>
+        <a href="{{ url_for('list_logs') }}" class="button">Back to Logs</a>
+    </div>
+{% endblock %}
