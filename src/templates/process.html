@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Process CSV File</h2>
+    <button id="openModalButton" class="btn">Open Modal for Inputs</button>
+
+    <div id="inputModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="plotForm" action="{{ url_for('csv_handler.plot_csv') }}" method="post">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <div class="form-group">
+                    <label for="chart_title">Chart Title</label>
+                    <input type="text" name="chart_title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="index_column">Index Column</label>
+                    {% if columns|length <= 10 %}
+                        <select name="index_column" class="form-control">
+                            {% for col in columns %}
+                                <option value="{{ col }}">{{ col }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <input type="text" name="index_column" class="form-control" required>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="plot_column">Plot Column</label>
+                    {% if columns|length <= 10 %}
+                        <select name="plot_column" class="form-control">
+                            {% for col in columns %}
+                                <option value="{{ col }}">{{ col }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <input type="text" name="plot_column" class="form-control" required>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn">Generate Plot</button>
+            </form>
+            <form id="deleteForm" action="{{ url_for('csv_handler.delete_csv', filename=filename) }}" method="post">
+                <button type="submit" class="btn delete-button">Delete File</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='modal.js') }}"></script>
+{% endblock %}

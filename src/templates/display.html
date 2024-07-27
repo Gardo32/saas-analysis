@@ -13,7 +13,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Compare Columns</h2>
-            <form id="compareForm" action="{{ url_for('csv_handler.process_csv_file', filename=filename) }}" method="post">
+            <form id="compareForm" action="{{ url_for('csv_handler.compare_columns', filename=filename) }}" method="post">
                 <div class="form-group">
                     <label for="index">Column Name for Index:</label>
                     <input type="text" name="index" id="index" class="form-control" required>
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Section to display the generated plot -->
-    <div id="plotContainer" style="display: none;">
+    <div id="plotContainer" class="plot-container" style="display: none;">
         <h2>Comparison Plot</h2>
         <img id="plotImage" src="" alt="Comparison Plot">
     </div>

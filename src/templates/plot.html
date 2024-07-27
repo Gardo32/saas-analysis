@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>CSV Plot</h2>
+    <div class="plot-container">
+        <img src="data:image/png;base64,{{ plot_url }}" alt="CSV Plot">
+    </div>
+    <form action="{{ url_for('csv_handler.delete_csv', filename=session['uploaded_file']) }}" method="post">
+        <button type="submit" class="btn delete-button">Delete File</button>
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='modal.js') }}"></script>
+{% endblock %}

@@ -5,9 +5,7 @@ from dotenv import load_dotenv
 import os
 from users import password_to_user, RFID0Corrector, addUser, reload_users_csv
 from admin import password_to_admin, reload_admin_csv
-import pandas as pd
-import datetime as dt
-from logs import logging, checklog
+from logs import logging
 from csv_handler import csv_handler_bp  # Import the blueprint
 
 load_dotenv()
