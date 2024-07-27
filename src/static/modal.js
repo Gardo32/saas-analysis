@@ -1,20 +1,33 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById("inputModal");
-    var btn = document.getElementById("openModalButton");
-    var span = document.getElementsByClassName("close")[0];
+document.addEventListener('DOMContentLoaded', (event) => {
+    var plotModal = document.getElementById("plotModal");
+    var heatmapModal = document.getElementById("heatmapModal");
 
-    btn.onclick = function() {
-        modal.style.display = "block";
+    var plotBtn = document.getElementById("openPlotModalButton");
+    var heatmapBtn = document.getElementById("openHeatmapModalButton");
+
+    var span = document.getElementsByClassName("close");
+
+    plotBtn.onclick = function () {
+        plotModal.style.display = "block";
     }
 
-    span.onclick = function() {
-        modal.style.display = "none";
+    heatmapBtn.onclick = function () {
+        heatmapModal.style.display = "block";
     }
 
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+    for (var i = 0; i < span.length; i++) {
+        span[i].onclick = function () {
+            plotModal.style.display = "none";
+            heatmapModal.style.display = "none";
+        }
+    }
+
+    window.onclick = function (event) {
+        if (event.target == plotModal) {
+            plotModal.style.display = "none";
+        }
+        if (event.target == heatmapModal) {
+            heatmapModal.style.display = "none";
         }
     }
 });
-// This script is similar to the one in compare.js, but it has some differences:

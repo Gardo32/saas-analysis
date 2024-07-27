@@ -18,7 +18,7 @@ nav a {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 500px;
     margin: 50px auto;
     padding: 20px;
     background-color: white;
@@ -87,7 +87,6 @@ h2 {
 .red {
     color: red;
 }
-
 .table-container {
     margin-top: 20px;
     overflow-x: auto;
@@ -162,7 +161,7 @@ table th {
 
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto;
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
@@ -183,31 +182,6 @@ table th {
     color: black;
     text-decoration: none;
     cursor: pointer;
-}
-
-input[type=text], input[type=password] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    border-radius: 5px;
-}
-
-.modal .button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    border-radius: 5px;
-}
-
-.modal .button:hover {
-    opacity: 0.8;
 }
 
 .plot-container {

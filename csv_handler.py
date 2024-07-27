@@ -6,7 +6,7 @@ import os
 import matplotlib.pyplot as plt
 import io
 import base64
-
+import seaborn as sns
 csv_handler_bp = Blueprint('csv_handler', __name__)
 
 
@@ -91,6 +91,26 @@ def delete_csv(filename):
         flash('File not found')
     return redirect(url_for('csv_handler.upload_csv'))
 
+@csv_handler_bp.route('/heatmap_csv', methods=['POST'])
+@login_required
+def heatmap_csv():
+    filename = request.form['filename']
+    chart_title = request.form['chart_title']
+
+    filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+    df = pd.read_csv(filepath)
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(df.corr(), annot=True, cmap='YlGnBu')
+    plt.title(chart_title)
+
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    plot_url = base64.b64encode(buf.getvalue()).decode('utf-8')
+    plt.close()
+
+    return render_template('heatmap.html', plot_url=plot_url)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'csv'}
