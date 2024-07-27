@@ -5,16 +5,34 @@
     <div class="table-container">
         {{ tables|safe }}
     </div>
-    <a href="{{ url_for('csv_handler.download_csv_file', filename=filename) }}" class="btn">Download Processed CSV</a>
-    <form action="{{ url_for('csv_handler.process_csv_file', filename=filename) }}" method="post">
-        <div class="form-group">
-            <label for="index">Column Name for Index:</label>
-            <input type="text" name="index" id="index" class="form-control" required>
+
+    <button id="compareButton" class="button">Compare Columns</button>
+
+    <!-- Modal for Column Comparison -->
+    <div id="compareModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Compare Columns</h2>
+            <form id="compareForm" action="{{ url_for('csv_handler.process_csv_file', filename=filename) }}" method="post">
+                <div class="form-group">
+                    <label for="index">Column Name for Index:</label>
+                    <input type="text" name="index" id="index" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="columns">Column to Plot:</label>
+                    <input type="text" name="columns" id="columns" class="form-control" required>
+                </div>
+                <button type="submit" class="btn">Generate Plot</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="columns">Column to Plot:</label>
-            <input type="text" name="columns" id="columns" class="form-control" required>
-        </div>
-        <input type="submit" value="Compare Columns" class="btn">
-    </form>
+    </div>
+
+    <!-- Section to display the generated plot -->
+    <div id="plotContainer" style="display: none;">
+        <h2>Comparison Plot</h2>
+        <img id="plotImage" src="" alt="Comparison Plot">
+    </div>
+
+    <!-- JavaScript file -->
+    <script src="{{ url_for('static', filename='compare.js') }}"></script>
 {% endblock %}
