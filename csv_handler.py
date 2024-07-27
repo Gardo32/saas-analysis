@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, send_from_directory, current_app, session, \
-    flash
+from flask import Blueprint, render_template, request, redirect, url_for, send_from_directory, current_app, session, flash
 from flask_login import login_required, current_user
 import pandas as pd
 import os
@@ -7,14 +6,19 @@ import matplotlib.pyplot as plt
 import io
 import base64
 import seaborn as sns
+
 csv_handler_bp = Blueprint('csv_handler', __name__)
 
+def encode_string_column(df, column_name):
+    unique_values = df[column_name].unique()
+    mapping = {value: idx for idx, value in enumerate(sorted(unique_values))}
+    df[column_name] = df[column_name].map(mapping)
+    return df
 
 @csv_handler_bp.route('/upload_csv')
 @login_required
 def upload_csv():
     return render_template('upload.html')
-
 
 @csv_handler_bp.route('/upload_csv', methods=['POST'])
 @login_required
@@ -34,16 +38,14 @@ def upload_csv_file():
     flash('Invalid file format')
     return redirect(request.url)
 
-
 @csv_handler_bp.route('/process_csv/<filename>')
 @login_required
 def process_csv_file(filename):
     filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
     df = pd.read_csv(filepath)
     columns = df.columns.tolist()
-    data_head = df.head(5).to_dict(orient='records')
-    return render_template('process.html', columns=columns, filename=filename,data_head=data_head)
-
+    data_head = df.head().to_dict(orient='records')
+    return render_template('process.html', columns=columns, filename=filename, data_head=data_head)
 
 @csv_handler_bp.route('/plot_csv', methods=['POST'])
 @login_required
@@ -79,7 +81,6 @@ def plot_csv():
 
     return render_template('plot.html', plot_url=plot_url)
 
-
 @csv_handler_bp.route('/delete_csv/<filename>', methods=['POST'])
 @login_required
 def delete_csv(filename):
@@ -101,11 +102,14 @@ def heatmap_csv():
     filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
     df = pd.read_csv(filepath)
 
+    for column in df.select_dtypes(include=['object']).columns:
+        df = encode_string_column(df, column)
+
     plt.figure(figsize=(10, 8))
     sns.heatmap(df.corr(), annot=True, cmap='YlGnBu')
     plt.title(chart_title)
 
-    buf = BytesIO()
+    buf = io.BytesIO()
     plt.savefig(buf, format='png')
     buf.seek(0)
     plot_url = base64.b64encode(buf.getvalue()).decode('utf-8')
