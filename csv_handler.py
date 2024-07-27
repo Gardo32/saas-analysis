@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import io
 import base64
 import seaborn as sns
+from logs import logging
 
 csv_handler_bp = Blueprint('csv_handler', __name__)
 
@@ -23,6 +24,7 @@ def upload_csv():
 @csv_handler_bp.route('/upload_csv', methods=['POST'])
 @login_required
 def upload_csv_file():
+    user_id = current_user.id
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
@@ -34,6 +36,7 @@ def upload_csv_file():
         filename = os.path.join(current_app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filename)
         session['uploaded_file'] = file.filename
+        logging(user_id, f'Uploaded file {file.filename} ')
         return redirect(url_for('csv_handler.process_csv_file', filename=file.filename))
     flash('Invalid file format')
     return redirect(request.url)
@@ -50,6 +53,7 @@ def process_csv_file(filename):
 @csv_handler_bp.route('/plot_csv', methods=['POST'])
 @login_required
 def plot_csv():
+    user_id = current_user.id
     filename = session.get('uploaded_file')
     if not filename:
         flash('No file uploaded')
@@ -78,17 +82,19 @@ def plot_csv():
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode('utf8')
     plt.close()
-
+    logging(user_id, f'Plotted chart {chart_title} with columns {myindex} and {cols}')
     return render_template('plot.html', plot_url=plot_url)
 
 @csv_handler_bp.route('/delete_csv/<filename>', methods=['POST'])
 @login_required
 def delete_csv(filename):
+    user_id = current_user.id
     filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
     if os.path.isfile(filepath):
         os.remove(filepath)
         session.pop('uploaded_file', None)
         flash('File deleted successfully')
+        logging(user_id, f'Deleted file {filename} ')
     else:
         flash('File not found')
     return redirect(url_for('csv_handler.upload_csv'))
@@ -96,6 +102,7 @@ def delete_csv(filename):
 @csv_handler_bp.route('/heatmap_csv', methods=['POST'])
 @login_required
 def heatmap_csv():
+    user_id = current_user.id
     filename = request.form['filename']
     chart_title = request.form['chart_title']
 
@@ -114,7 +121,7 @@ def heatmap_csv():
     buf.seek(0)
     plot_url = base64.b64encode(buf.getvalue()).decode('utf-8')
     plt.close()
-
+    logging(user_id, f'Plotted heatmap called {chart_title} for file {filename}')
     return render_template('heatmap.html', plot_url=plot_url)
 
 def allowed_file(filename):
