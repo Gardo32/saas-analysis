@@ -41,7 +41,8 @@ def process_csv_file(filename):
     filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
     df = pd.read_csv(filepath)
     columns = df.columns.tolist()
-    return render_template('process.html', columns=columns, filename=filename)
+    data_head = df.head(5).to_dict(orient='records')
+    return render_template('process.html', columns=columns, filename=filename,data_head=data_head)
 
 
 @csv_handler_bp.route('/plot_csv', methods=['POST'])

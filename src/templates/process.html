@@ -63,6 +63,30 @@
     <form id="deleteForm" action="{{ url_for('csv_handler.delete_csv', filename=filename) }}" method="post">
         <button type="submit" class="btn delete-button">Delete File</button>
     </form>
+
+    <h2>CSV Data Header</h2>
+    {% if data_head %}
+    <table>
+        <thead>
+            <tr>
+                {% for column in columns %}
+                <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data_head %}
+            <tr>
+                {% for column in columns %}
+                <td>{{ row[column] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No data to display</p>
+    {% endif %}
 </div>
 
 <script src="{{ url_for('static', filename='modal.js') }}"></script>
